@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Path where FFmpeg will be installed
+BUILD_DIR=$1
+
+# Create a directory for FFmpeg binaries
+mkdir -p $BUILD_DIR/.ffmpeg/bin
+
+# Go to the directory
+cd $BUILD_DIR/.ffmpeg/bin
+
+# Download FFmpeg binaries
+curl -L https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz | tar xJ
+
+# Move the binaries to the bin directory
+mv ffmpeg-*-amd64-static/ffmpeg ffmpeg-*-amd64-static/ffprobe $BUILD_DIR/.ffmpeg/bin
+
+# Clean up
+rm -rf ffmpeg-*-amd64-static
+
+# Add the bin directory to PATH for global access
+echo "export PATH=\"\$PATH:$BUILD_DIR/.ffmpeg/bin\"" > $BUILD_DIR/.profile.d/ffmpeg.sh
+chmod +x $BUILD_DIR/.profile.d/ffmpeg.sh
+
